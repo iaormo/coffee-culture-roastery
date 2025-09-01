@@ -1,0 +1,35 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#CC2321;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#B91C1C;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background circle -->
+  <circle cx="256" cy="256" r="256" fill="url(#bg)"/>
+  
+  <!-- Coffee cup -->
+  <g transform="translate(128, 128)">
+    <!-- Cup body -->
+    <path d="M 64 80 L 64 320 L 320 320 L 320 80 L 288 80 L 288 48 L 96 48 L 96 80 Z" fill="#FFFFFF" stroke="#000000" stroke-width="8"/>
+    
+    <!-- Cup handle -->
+    <path d="M 320 160 Q 384 160 384 200 Q 384 240 320 240" fill="none" stroke="#FFFFFF" stroke-width="12"/>
+    <path d="M 320 160 Q 384 160 384 200 Q 384 240 320 240" fill="none" stroke="#000000" stroke-width="4"/>
+    
+    <!-- Coffee inside -->
+    <rect x="72" y="88" width="240" height="224" rx="8" fill="#8B4513" opacity="0.8"/>
+    
+    <!-- Steam -->
+    <path d="M 120 64 Q 110 48 100 64" fill="none" stroke="#FFFFFF" stroke-width="6" opacity="0.7"/>
+    <path d="M 160 64 Q 150 48 140 64" fill="none" stroke="#FFFFFF" stroke-width="6" opacity="0.7"/>
+    <path d="M 200 64 Q 190 48 180 64" fill="none" stroke="#FFFFFF" stroke-width="6" opacity="0.7"/>
+    <path d="M 240 64 Q 230 48 220 64" fill="none" stroke="#FFFFFF" stroke-width="6" opacity="0.7"/>
+    
+    <!-- Coffee beans decoration -->
+    <ellipse cx="320" cy="120" rx="8" ry="12" fill="#FFFFFF" opacity="0.3"/>
+    <ellipse cx="340" cy="100" rx="6" ry="8" fill="#FFFFFF" opacity="0.3"/>
+    <ellipse cx="360" cy="140" rx="7" ry="10" fill="#FFFFFF" opacity="0.3"/>
+  </g>
+</svg> 
