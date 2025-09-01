@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { MapPin, Phone, Mail, Clock, Send, Coffee } from 'lucide-react';
+import { MapPin, Phone, Mail, Clock, Send, Coffee, MessageCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -274,6 +274,55 @@ const Contact = () => {
                   </Button>
                 </CardContent>
               </Card>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Chatbot Showcase */}
+      <section className="py-16 bg-gray-50">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="font-knewave text-3xl sm:text-4xl text-passion-red mb-4">
+              NEED HELP? CHAT WITH US!
+            </h2>
+            <p className="font-glacial text-lg text-balanced-gray max-w-2xl mx-auto">
+              Our AI assistant is here to help answer your questions about coffee, orders, and more.
+            </p>
+          </div>
+          
+          <div className="max-w-4xl mx-auto">
+            <div className="bg-white rounded-2xl shadow-lg p-8 text-center">
+              <div className="bg-passion-red/10 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
+                <MessageCircle className="h-10 w-10 text-passion-red" />
+              </div>
+              <h3 className="font-knewave text-2xl text-passion-red mb-4">
+                Coffee Culture AI Assistant
+              </h3>
+              <p className="font-glacial text-balanced-gray mb-6 max-w-2xl mx-auto">
+                Get instant answers about our coffee types, roasting process, shipping, subscriptions, 
+                roastery visits, and much more. Our AI assistant is available 24/7 to help you!
+              </p>
+              <div className="flex flex-wrap justify-center gap-4 mb-6">
+                <span className="px-3 py-1 bg-passion-red/10 text-passion-red text-sm font-glacial rounded-full">
+                  Coffee Types
+                </span>
+                <span className="px-3 py-1 bg-passion-red/10 text-passion-red text-sm font-glacial rounded-full">
+                  Roasting Process
+                </span>
+                <span className="px-3 py-1 bg-passion-red/10 text-passion-red text-sm font-glacial rounded-full">
+                  Shipping Info
+                </span>
+                <span className="px-3 py-1 bg-passion-red/10 text-passion-red text-sm font-glacial rounded-full">
+                  Business Hours
+                </span>
+                <span className="px-3 py-1 bg-passion-red/10 text-passion-red text-sm font-glacial rounded-full">
+                  Roastery Tours
+                </span>
+              </div>
+              <p className="font-glacial text-sm text-balanced-gray">
+                💡 <strong>Tip:</strong> Look for the chat bubble in the bottom-right corner of any page!
+              </p>
             </div>
           </div>
         </div>

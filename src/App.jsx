@@ -11,6 +11,7 @@ import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
 import OrderConfirmation from './pages/OrderConfirmation';
 import Admin from './pages/Admin';
+import Chatbot from './components/Chatbot';
 import './App.css';
 
 function App() {
@@ -32,6 +33,7 @@ function App() {
             </Routes>
           </main>
           <Footer />
+          <Chatbot />
         </div>
       </Router>
     </CartProvider>
