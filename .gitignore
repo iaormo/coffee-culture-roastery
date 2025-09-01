@@ -8,6 +8,13 @@ dist/
 build/
 out/
 
+# Allow PWA files in public folder
+!public/manifest.json
+!public/sw.js
+!public/icon.svg
+!public/icon-192.png
+!public/icon-512.png
+
 # Environment variables
 .env
 .env.local
