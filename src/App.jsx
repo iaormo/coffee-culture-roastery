@@ -11,6 +11,9 @@ import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
 import OrderConfirmation from './pages/OrderConfirmation';
 import Admin from './pages/Admin';
+import Blog from './pages/Blog';
+import BlogPost from './pages/BlogPost';
+import CoffeeExperiences from './pages/CoffeeExperiences';
 import Chatbot from './components/Chatbot';
 import './App.css';
 
@@ -26,6 +29,9 @@ function App() {
               <Route path="/shop" element={<Shop />} />
               <Route path="/about" element={<About />} />
               <Route path="/contact" element={<Contact />} />
+              <Route path="/blog" element={<Blog />} />
+              <Route path="/blog/:id" element={<BlogPost />} />
+              <Route path="/coffee-experiences" element={<CoffeeExperiences />} />
               <Route path="/cart" element={<Cart />} />
               <Route path="/checkout" element={<Checkout />} />
               <Route path="/order-confirmation" element={<OrderConfirmation />} />

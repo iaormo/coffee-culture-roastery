@@ -10,29 +10,48 @@ const Chatbot = () => {
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
 
-  // Mock knowledge base for coffee-related questions
-  const knowledgeBase = {
-    'coffee types': 'We offer various coffee types including 100% Arabica (Unleashed, Black Magic), Robusta blends (Negros Blend), and specialty roasts. Each has unique flavor profiles from sweet caramel to bold chocolate notes.',
-    'roasting process': 'Our master roasters use small-batch roasting techniques to ensure maximum freshness. We roast daily and carefully monitor temperature and time for each bean variety to bring out the best flavors.',
-    'shipping': 'We ship fresh roasted coffee throughout the Philippines. Orders are typically processed within 1-2 business days and delivered to your doorstep.',
-    'subscription': 'Yes! We offer flexible subscription plans with weekly, bi-weekly, or monthly deliveries. You can customize your selection and pause anytime.',
-    'roastery visit': 'Absolutely! We offer roastery tours by appointment Tuesday - Saturday, 10:00 AM - 4:00 PM. You\'ll see our roasting process and enjoy tastings.',
-    'coffee origins': 'We source our beans directly from Philippine farmers, particularly from Negros Occidental. We work with local farmers to ensure ethical sourcing and sustainable practices.',
-    'brewing tips': 'For best results, use freshly ground beans, filtered water at 195-205°F, and the right grind size for your brewing method. We can provide specific recommendations for each blend.',
-    'decaf': 'Yes, we offer Decaf Delight - 100% Arabica that\'s Swiss water processed for purity. All the flavor without the caffeine!',
-    'return policy': 'We stand behind our coffee quality. If you\'re not satisfied, contact us within 7 days for a full refund or replacement.',
-    'contact': 'You can reach us at hello@coffeeculture.ph or call +63 123 456 7890. We\'re located in Bacolod City, Negros Occidental.',
-    'hours': 'We\'re open Monday - Friday: 6:00 AM - 9:00 PM, Saturday - Sunday: 7:00 AM - 10:00 PM.',
-    'location': 'We\'re located in Bacolod City, Negros Occidental, Philippines. Our roastery is open for tours by appointment.',
-    'payment': 'We accept all major credit cards, digital wallets, and bank transfers. Payment is processed securely at checkout.',
-    'gift cards': 'Yes! We offer gift cards that make perfect presents for coffee lovers. They can be used for any of our products and services.',
-    'wholesale': 'We do offer wholesale pricing for cafes, restaurants, and businesses. Contact us at orders@coffeeculture.ph for wholesale inquiries.',
-    'sustainability': 'We\'re committed to sustainability through direct farmer partnerships, eco-friendly packaging, and waste reduction in our roasting process.',
-    'flavor profiles': 'Our coffees range from light and floral (Morning Glory) to bold and robust (Black Magic). Each blend has detailed tasting notes on our website.',
-    'grinding': 'We recommend grinding beans just before brewing for maximum freshness. We can grind to your preferred size or you can grind at home.',
-    'storage': 'Store coffee in an airtight container in a cool, dark place. Avoid refrigeration as it can cause condensation and affect flavor.',
-    'espresso': 'Our Espresso Supreme blend is crafted specifically for espresso lovers with rich crema and intense flavor. Perfect for both straight shots and milk drinks.'
-  };
+  // Gemini API configuration
+  const GEMINI_API_KEY = 'AIzaSyBOWJ6-ANkHipd28QP-7qm9SS7tBhPVyKo';
+  const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent';
+
+  // Coffee Culture AI Assistant context
+  const coffeeContext = `
+    You are the Coffee Culture Roastery AI Assistant, a helpful and knowledgeable virtual assistant for Coffee Culture Roastery in Bacolod City, Philippines.
+    
+    IMPORTANT: You are NOT Thomas. You are an AI assistant that helps customers with information about Coffee Culture Roastery.
+    
+    About Coffee Culture Roastery:
+    - Located in Bacolod City, Negros Occidental, Philippines
+    - Founded with a farm-to-cup philosophy
+    - Direct partnerships with local Philippine farmers
+    - Small-batch roasting for maximum freshness
+    - Open Monday-Friday 6AM-9PM, Saturday-Sunday 7AM-10PM
+    - Contact: hello@coffeeculture.ph, +63 123 456 7890, +63 987 654 3210
+    - Orders: orders@coffeeculture.ph
+    
+    Our Coffee Blends (with exact prices):
+    - Unleashed (100% Arabica): ₱450 - Balanced medium-body, sweet caramel, milk chocolate notes
+    - Black Magic (100% Arabica): ₱480 - Full-body, low-acidity, dark chocolate, roasted nuts
+    - Negros Blend (80% Robusta, 20% Arabica): ₱420 - Bold and robust, chocolate, nuts, stone fruit
+    - Decaf Delight (100% Arabica): Swiss water processed, all flavor without caffeine
+    
+    Services:
+    - Nationwide shipping throughout Philippines (1-2 business days processing)
+    - Roastery tours by appointment (Tuesday-Saturday, 10AM-4PM)
+    - Subscription plans available (weekly, bi-weekly, monthly)
+    - Wholesale for businesses (contact orders@coffeeculture.ph)
+    - Gift cards available
+    
+    Business Information:
+    - Return policy: 7 days satisfaction guarantee
+    - Payment: All major credit cards, digital wallets, bank transfers
+    - Sustainability: Eco-friendly packaging, waste reduction, ethical sourcing
+    - Master roasters: Certified Q Arabica & Robusta graders
+    
+    Your personality: Be helpful, professional, and friendly. Provide accurate information based on the website content. 
+    Keep responses concise (2-3 sentences max) but informative. Always mention that you're the Coffee Culture AI Assistant.
+    If you don't know something specific, direct them to contact hello@coffeeculture.ph or call +63 123 456 7890.
+  `;
 
   // Common questions to suggest
   const suggestedQuestions = [
@@ -50,7 +69,7 @@ const Chatbot = () => {
       setMessages([
         {
           id: 1,
-          text: "Hello! I'm your Coffee Culture assistant. I can help you learn about our coffee, services, and answer any questions you might have. How can I help you today?",
+          text: "Hello! I'm your Coffee Culture AI Assistant. I can help you learn about our coffee blends, services, and answer any questions about Coffee Culture Roastery. How can I assist you today? ☕",
           sender: 'bot',
           timestamp: new Date()
         }
@@ -70,35 +89,84 @@ const Chatbot = () => {
     }
   }, [isOpen]);
 
-  const findAnswer = (question) => {
-    const lowerQuestion = question.toLowerCase();
-    
-    // Check for exact matches first
-    for (const [key, answer] of Object.entries(knowledgeBase)) {
-      if (lowerQuestion.includes(key)) {
-        return answer;
+  const generateResponse = async (userMessage) => {
+    try {
+      console.log('Generating response for:', userMessage);
+      
+      const prompt = `${coffeeContext}\n\nCustomer: ${userMessage}\n\nCoffee Culture AI Assistant (respond as the AI assistant):`;
+      
+      const response = await fetch(`${GEMINI_API_URL}?key=${GEMINI_API_KEY}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          contents: [{
+            parts: [{
+              text: prompt
+            }]
+          }],
+          generationConfig: {
+            temperature: 0.5,
+            topK: 40,
+            topP: 0.95,
+            maxOutputTokens: 120,
+          }
+        })
+      });
+
+      console.log('API Response status:', response.status);
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('API Error response:', errorText);
+        throw new Error(`API request failed: ${response.status} ${response.statusText}`);
       }
+
+      const data = await response.json();
+      console.log('API Response data:', data);
+      
+      if (data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts && data.candidates[0].content.parts[0]) {
+        const responseText = data.candidates[0].content.parts[0].text.trim();
+        console.log('Generated response:', responseText);
+        return responseText;
+      } else {
+        console.error('Invalid response structure:', data);
+        throw new Error('Invalid response format from Gemini API');
+      }
+    } catch (error) {
+      console.error('Error calling Gemini API:', error);
+      
+      // Provide specific responses based on common questions
+      const lowerMessage = userMessage.toLowerCase();
+      
+      if (lowerMessage.includes('coffee') || lowerMessage.includes('blend') || lowerMessage.includes('type')) {
+        return "We offer several coffee blends: Unleashed (₱450 - 100% Arabica with caramel notes), Black Magic (₱480 - full-bodied Arabica), and Negros Blend (₱420 - 80% Robusta, 20% Arabica). Each is carefully roasted for maximum flavor!";
+      }
+      
+      if (lowerMessage.includes('price') || lowerMessage.includes('cost')) {
+        return "Our coffee prices range from ₱420 to ₱480. Unleashed is ₱450, Black Magic is ₱480, and Negros Blend is ₱420. All prices include our premium small-batch roasting process.";
+      }
+      
+      if (lowerMessage.includes('shipping') || lowerMessage.includes('delivery')) {
+        return "We ship nationwide throughout the Philippines! Orders are processed within 1-2 business days and delivered to your doorstep. Contact us at hello@coffeeculture.ph for specific delivery questions.";
+      }
+      
+      if (lowerMessage.includes('visit') || lowerMessage.includes('roastery') || lowerMessage.includes('tour')) {
+        return "Absolutely! We offer roastery tours by appointment Tuesday-Saturday, 10AM-4PM. You'll see our roasting process and enjoy tastings. Contact us to schedule your visit!";
+      }
+      
+      if (lowerMessage.includes('hour') || lowerMessage.includes('open')) {
+        return "We're open Monday-Friday 6AM-9PM and Saturday-Sunday 7AM-10PM. Our roastery tours are available Tuesday-Saturday, 10AM-4PM by appointment.";
+      }
+      
+      if (lowerMessage.includes('contact') || lowerMessage.includes('phone') || lowerMessage.includes('email')) {
+        return "You can reach us at hello@coffeeculture.ph or call +63 123 456 7890 / +63 987 654 3210. We're located in Bacolod City, Negros Occidental, Philippines.";
+      }
+      
+      // Generic fallback
+      return "I'm here to help with information about Coffee Culture Roastery! Ask me about our coffee blends, prices, shipping, roastery visits, or contact details. For immediate assistance, call +63 123 456 7890.";
     }
-    
-    // Check for partial matches
-    if (lowerQuestion.includes('coffee') || lowerQuestion.includes('beans')) {
-      return 'We offer premium coffee beans from local Philippine farmers, including Arabica, Robusta, and specialty blends. Each is carefully roasted to bring out unique flavor profiles.';
-    }
-    
-    if (lowerQuestion.includes('price') || lowerQuestion.includes('cost')) {
-      return 'Our coffee prices range from ₱420 to ₱520 depending on the blend and size. We offer competitive pricing for premium quality coffee.';
-    }
-    
-    if (lowerQuestion.includes('delivery') || lowerQuestion.includes('shipping')) {
-      return 'We offer nationwide shipping throughout the Philippines. Delivery typically takes 1-2 business days after processing.';
-    }
-    
-    if (lowerQuestion.includes('fresh') || lowerQuestion.includes('roasted')) {
-      return 'We roast our coffee in small batches daily to ensure maximum freshness. Each bag is stamped with the roast date so you know exactly when it was made.';
-    }
-    
-    // Default response
-    return "I'm not sure about that specific question, but I'd be happy to help you with information about our coffee, roasting process, shipping, or visiting our roastery. Feel free to ask something else!";
   };
 
   const handleSendMessage = async () => {
@@ -115,19 +183,29 @@ const Chatbot = () => {
     setInputMessage('');
     setIsTyping(true);
 
-    // Simulate typing delay
-    setTimeout(() => {
-      const answer = findAnswer(inputMessage);
+    try {
+      const response = await generateResponse(inputMessage);
+      
       const botMessage = {
         id: Date.now() + 1,
-        text: answer,
+        text: response,
         sender: 'bot',
         timestamp: new Date()
       };
       
       setMessages(prev => [...prev, botMessage]);
+    } catch (error) {
+      console.error('Error generating response:', error);
+      const errorMessage = {
+        id: Date.now() + 1,
+        text: "Sorry! My system is having issues. For immediate assistance, please contact us at hello@coffeeculture.ph or call +63 123 456 7890. ☕",
+        sender: 'bot',
+        timestamp: new Date()
+      };
+      setMessages(prev => [...prev, errorMessage]);
+    } finally {
       setIsTyping(false);
-    }, 1000 + Math.random() * 1000); // Random delay between 1-2 seconds
+    }
   };
 
   const handleSuggestedQuestion = (question) => {

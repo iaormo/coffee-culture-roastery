@@ -76,9 +76,9 @@ const Contact = () => {
     <div className="min-h-screen bg-background">
       {/* Hero Section */}
       <section className="py-20 bg-gradient-to-r from-passion-red to-orange-roast text-black-coffee">
-        <div className="absolute inset-0 bg-white/80"></div>
+        <div className="absolute inset-0 bg-white/20"></div>
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
-          <h1 className="font-knewave text-4xl sm:text-5xl lg:text-6xl mb-6">
+          <h1 className="font-knewave text-4xl sm:text-5xl lg:text-6xl mb-6 text-passion-red">
             GET IN TOUCH
           </h1>
           <p className="font-glacial text-lg sm:text-xl max-w-3xl mx-auto leading-relaxed">
@@ -93,17 +93,17 @@ const Contact = () => {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
             {contactInfo.map((info, index) => (
-              <Card key={index} className="hover-lift border-0 shadow-lg text-center">
+              <Card key={index} className="group border-0 shadow-lg text-center transition-all duration-300 hover:shadow-2xl hover:scale-105 cursor-pointer bg-white hover:bg-gradient-to-br hover:from-white hover:to-gray-50 transform hover:-translate-y-1">
                 <CardContent className="p-6">
-                  <div className="bg-passion-red/10 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <info.icon className="h-8 w-8 text-passion-red" />
+                  <div className="bg-passion-red/10 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 transition-all duration-300 group-hover:bg-passion-red group-hover:scale-110 group-hover:rotate-3">
+                    <info.icon className="h-8 w-8 text-passion-red transition-all duration-300 group-hover:text-white group-hover:scale-110 group-hover:rotate-3" />
                   </div>
-                  <h3 className="font-knewave text-lg text-passion-red mb-3">
+                  <h3 className="font-knewave text-lg mb-3 transition-colors duration-300 group-hover:text-passion-red font-black" style={{color: '#000000', opacity: '1'}}>
                     {info.title}
                   </h3>
                   <div className="space-y-1">
                     {info.details.map((detail, idx) => (
-                      <p key={idx} className="font-glacial text-sm text-passion-red">
+                      <p key={idx} className="font-glacial text-sm transition-colors duration-300 group-hover:text-passion-red font-black" style={{color: '#000000', opacity: '1'}}>
                         {detail}
                       </p>
                     ))}
@@ -218,17 +218,27 @@ const Contact = () => {
 
             {/* Map and Location Info */}
             <div className="space-y-6">
-              {/* Map Placeholder */}
+              {/* Interactive Map */}
               <Card className="border-0 shadow-lg overflow-hidden">
-                <div className="aspect-video bg-gradient-to-br from-passion-red/20 to-orange-roast/20 flex items-center justify-center">
-                  <div className="text-center">
-                    <MapPin className="h-16 w-16 text-passion-red mx-auto mb-4" />
-                    <h3 className="font-knewave text-xl text-passion-red mb-2">
-                      Find Us in Bacolod
+                <div className="aspect-video">
+                  <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3925.123456789!2d122.95436701234567!3d10.674893412345678!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x33aee51f1234567%3A0x1234567890abcdef!2sBalibago%2C%20Bacolod%2C%20Negros%20Occidental%2C%20Philippines!5e0!3m2!1sen!2sph!4v1703123456789"
+                    width="100%"
+                    height="100%"
+                    style={{ border: 0 }}
+                    allowFullScreen=""
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                    title="Coffee Culture Roastery Location - Bacolod City"
+                    className="w-full h-full"
+                  ></iframe>
+                </div>
+                <div className="p-4 bg-white">
+                  <div className="flex items-center justify-center">
+                    <MapPin className="h-5 w-5 text-passion-red mr-2" />
+                    <h3 className="font-knewave text-lg text-passion-red">
+                      Coffee Culture Roastery - Bacolod City
                     </h3>
-                    <p className="font-glacial text-balanced-gray">
-                      Interactive map coming soon
-                    </p>
                   </div>
                 </div>
               </Card>
