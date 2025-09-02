@@ -15,6 +15,7 @@ import Blog from './pages/Blog';
 import BlogPost from './pages/BlogPost';
 import CoffeeExperiences from './pages/CoffeeExperiences';
 import Chatbot from './components/Chatbot';
+import DemoBanner from './components/DemoBanner';
 import './App.css';
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
     <CartProvider>
       <Router>
         <div className="min-h-screen flex flex-col">
+          <DemoBanner />
           <Header />
           <main className="flex-1">
             <Routes>
